@@ -1,0 +1,11 @@
+---
+gudhi_version: "2.1.0"
+gudhi_src: "2018-01-31-09-25-53_GUDHI_2.1.0"
+gudhi_src_archive: "{{ gudhi_src }}.tar.gz"
+gudhi_code_folder: "${HOME}"
+gudhi_url: "https://gforge.inria.fr/frs/download.php/file/37362/{{ gudhi_src_archive }}"
+gudhi_topdir: "{{ gudhi_code_folder }}/{{gudhi_src}}"
+gudhi_executables:
+  - gudhi
+
+root_user: root

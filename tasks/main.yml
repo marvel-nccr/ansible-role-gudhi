@@ -1,0 +1,62 @@
+---
+- name: Install gudhi dependencies
+  become: true
+  become_user: "{{ root_user }}"
+  apt:
+      name: "{{ item }}"
+      state: latest
+  with_items:
+    - libboost-all-dev
+
+# Will only download once
+- name: Get gudhi
+  get_url:
+    url: "{{ gudhi_url }}"
+    dest: "{{ gudhi_code_folder }}/{{ gudhi_src_archive }}"
+  register: gudhi_download
+
+- name: Extract gudhi source
+  unarchive:
+    src: "{{ gudhi_download.dest }}"
+    dest: "{{ gudhi_code_folder }}"
+    remote_src: True
+  when: gudhi_download.changed
+
+- name: Create build dir
+  file:
+    path: "{{ gudhi_topdir }}/build"
+    state: directory
+
+- name: run cmake
+  shell: cmake ..
+  args:
+    chdir: "{{ gudhi_topdir }}/build"
+
+- name: make gudhi
+  make:
+    chdir: "{{ gudhi_topdir }}/build"
+- import_tasks: tests.yml
+  when: gudhi_make.changed and run_tests is defined and run_tests
+
+- name: "Put a line in ~/.profile to add gudhi to the path"
+  lineinfile:
+    path: "${HOME}/.profile"
+    line: "export PATH=${PATH}:{{ gudhi_topdir }}/build/utilities/Rips_complex"
+
+- include_role:
+    name: release_notes
+  vars:
+    section: "gudhi"
+    option: "version"
+    value: "{{ gudhi_version }}"
+  when: release_notes is defined and release_notes
+
+- include_role:
+    name: release_notes
+  vars:
+    section: "gudhi"
+    option: "usage"
+    value: >-
+      gudhi is compiled and installed in {{ gudhi_topdir }}.
+      simply run 'rips_persistence'
+  when: release_notes is defined and release_notes
