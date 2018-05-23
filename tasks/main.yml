@@ -35,8 +35,9 @@
 - name: make gudhi
   make:
     chdir: "{{ gudhi_topdir }}/build"
-- import_tasks: tests.yml
-  when: gudhi_make.changed and run_tests is defined and run_tests
+     
+#- import_tasks: tests.yml
+#  when: gudhi_make.changed and run_tests is defined and run_tests
 
 - name: "Put a line in ~/.profile to add gudhi to the path"
   lineinfile:
