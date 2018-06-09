@@ -39,10 +39,11 @@
 #- import_tasks: tests.yml
 #  when: gudhi_make.changed and run_tests is defined and run_tests
 
-- name: "Put a line in ~/.profile to add gudhi to the path"
+- name: "Put a line in ~/.profile to add executables to the path"
   lineinfile:
     path: "${HOME}/.profile"
-    line: "export PATH=${PATH}:{{ gudhi_topdir }}/build/utilities/Rips_complex"
+    line: "export PATH=${PATH}:{{ item.folder }}"
+  with_items: "{{ gudhi_executables }}"
 
 - include_role:
     name: release_notes
