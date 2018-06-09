@@ -7,6 +7,7 @@
       state: latest
   with_items:
     - libboost-all-dev
+    - cmake
 
 # Will only download once
 - name: Get gudhi
