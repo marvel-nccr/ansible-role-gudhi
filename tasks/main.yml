@@ -33,10 +33,13 @@
   shell: cmake ..
   args:
     chdir: "{{ gudhi_topdir }}/build"
+    creates: "{{ gudhi_topdir }}/build/cmake_install.cmake"
 
 - name: make gudhi
-  make:
+  shell: make
+  args:
     chdir: "{{ gudhi_topdir }}/build"
+    creates: "{{ gudhi_topdir }}/build/utilities/Rips_complex/rips_distance_matrix_persistence"
      
 #- import_tasks: tests.yml
 #  when: gudhi_make.changed and run_tests is defined and run_tests
