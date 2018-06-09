@@ -8,6 +8,7 @@
   with_items:
     - libboost-all-dev
     - cmake
+    - build-essential
 
 # Will only download once
 - name: Get gudhi
