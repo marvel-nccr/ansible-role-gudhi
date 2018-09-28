@@ -1,12 +1,6 @@
 ---
-- name: Install gudhi dependencies
-  become: true
-  become_user: "{{ root_user }}"
-  apt:
-      name: "{{ item }}"
-      state: latest
-  with_items:
-    - libboost-all-dev
+# make sure to
+# module load gcc/7.3.0  mvapich2/2.3rc2 boost
 
 # Will only download once
 - name: Get gudhi
@@ -20,7 +14,7 @@
     src: "{{ gudhi_download.dest }}"
     dest: "{{ gudhi_code_folder }}"
     remote_src: True
-  when: gudhi_download.changed
+  #when: gudhi_download.changed
 
 - name: Create build dir
   file:
@@ -28,7 +22,7 @@
     state: directory
 
 - name: run cmake
-  shell: cmake ..
+  shell: CC=gcc CXX=g++ cmake ..
   args:
     chdir: "{{ gudhi_topdir }}/build"
 
@@ -43,21 +37,3 @@
   lineinfile:
     path: "${HOME}/.profile"
     line: "export PATH=${PATH}:{{ gudhi_topdir }}/build/utilities/Rips_complex"
-
-- include_role:
-    name: release_notes
-  vars:
-    section: "gudhi"
-    option: "version"
-    value: "{{ gudhi_version }}"
-  when: release_notes is defined and release_notes
-
-- include_role:
-    name: release_notes
-  vars:
-    section: "gudhi"
-    option: "usage"
-    value: >-
-      gudhi is compiled and installed in {{ gudhi_topdir }}.
-      simply run 'rips_persistence'
-  when: release_notes is defined and release_notes
