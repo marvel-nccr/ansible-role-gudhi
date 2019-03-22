@@ -2,6 +2,14 @@
 # make sure to
 # module load gcc/7.3.0  mvapich2/2.3rc2 boost
 
+- name: Install gudhi dependencies
+  become: true
+  become_user: "{{ root_user }}"
+  apt:
+    name: "{{ item }}"
+  with_items:
+    - libboost-all-dev
+
 # Will only download once
 - name: Get gudhi
   get_url:
