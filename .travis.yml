@@ -8,7 +8,7 @@ services:
 
 env:
   global:
-    - ANSIBLE_ROLE: aiidalab
+    - ANSIBLE_ROLE: gudhi
 
 matrix:
   include:
