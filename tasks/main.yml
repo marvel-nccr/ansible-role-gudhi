@@ -13,8 +13,8 @@
   unarchive:
     src: "{{ gudhi_download.dest }}"
     dest: "{{ gudhi_code_folder }}"
-    remote_src: True
-  #when: gudhi_download.changed
+    remote_src: true
+    # when: gudhi_download.changed
 
 - name: Create build dir
   file:
@@ -25,13 +25,14 @@
   shell: CC=gcc CXX=g++ cmake ..
   args:
     chdir: "{{ gudhi_topdir }}/build"
+    creates: "{{ gudhi_topdir }}/build/Makefile"
 
 - name: make gudhi
   make:
     chdir: "{{ gudhi_topdir }}/build"
-     
-#- import_tasks: tests.yml
-#  when: gudhi_make.changed and run_tests is defined and run_tests
+
+# - import_tasks: tests.yml
+#   when: gudhi_make.changed and run_tests is defined and run_tests
 
 - name: "Put a line in ~/.profile to add gudhi to the path"
   lineinfile:
